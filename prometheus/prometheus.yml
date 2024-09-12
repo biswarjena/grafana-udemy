@@ -2,10 +2,17 @@ global:
   scrape_interval: 5s
 
 scrape_configs:
-  - job_name: 'shoehub'
+  - job_name: "shoehub"
     static_configs:
       - targets:
           - shoehub:8080
+
+  - job_name: "minikube_helmpacks"
+
+    #for machine running in kubernetes helmpacks profile
+    #Changed kube-prometheus-stack-prometheus-node-exporter and kube-prometheus-stack-kube-state-metrics from ClusterIP to NodePort
+    static_configs:
+      - targets: ["192.168.109.2:31145", "192.168.109.2:32249"]
 
 rule_files:
   - "rule/alerts.yml"
@@ -13,12 +20,12 @@ rule_files:
 
 alerting:
   alertmanagers:
-  - scheme: http
-    basic_auth:
-      username: "admin"
-      password: "password"
-  - static_configs:
-    - targets:
-       - localhost:9093
+    - scheme: http
+      basic_auth:
+        username: "admin"
+        password: "password"
+    - static_configs:
+        - targets:
+            - localhost:9093
 
 
